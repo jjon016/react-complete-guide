@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './ExpenseForm.css';
-const ExpenseForm = () => {
+const ExpenseForm = (props) => {
   const [Title, setTitle] = useState('');
   const [Amount, setAmount] = useState('');
   const [aDate, setADate] = useState('');
@@ -16,19 +16,24 @@ const ExpenseForm = () => {
   };
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log({ title: Title, amount: Amount, date: aDate });
+    const newExpense = { title: Title, amount: Amount, date: new Date(aDate) };
+    setTitle('');
+    setAmount('');
+    setADate('');
+    props.onNewExpense(newExpense);
   };
   return (
     <form onSubmit={submitHandler}>
       <div className="new-expense__controls">
         <div className="new-expense__control">
           <label>Title</label>
-          <input type="text" onChange={titleChangeHandler} />
+          <input type="text" value={Title} onChange={titleChangeHandler} />
         </div>
         <div className="new-expense__control">
           <label>Amount</label>
           <input
             type="number"
+            value={Amount}
             min="0.01"
             step="0.01"
             onChange={amountChangeHandler}
@@ -36,7 +41,12 @@ const ExpenseForm = () => {
         </div>
         <div className="new-expense__control">
           <label>Date</label>
-          <input type="date" min="2019-01-01" onChange={dateChangeHandler} />
+          <input
+            type="date"
+            value={aDate}
+            min="2019-01-01"
+            onChange={dateChangeHandler}
+          />
         </div>
       </div>
       <div className="new-expense__actions">
